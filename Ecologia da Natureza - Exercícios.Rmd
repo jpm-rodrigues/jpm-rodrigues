@@ -1,0 +1,649 @@
+---
+title: Exercícios resolvidos - Ecologia da Natureza
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+# Capítulo 1
+
+## Análise de dados em Ecologia - pg. 59
+
+Calcular a média e a variância da amostra do conjunto de amostras:
+
+```{r}
+# definir o data frame a ser trabalhado:
+
+df <- data.frame(árvores_cobertas = c(8, 6, 7, 9, 5), árvores_descobertas = c(4, 3, 2, 4, 2))
+
+# calcular a média utilizando a função pré definida "mean()" do R. Utilizar o operador $ para selecionar o conjunto de observações: 
+# **ATENÇÃO**: a função "median()" é utilizada para calcular a mediana.
+
+mean (df$árvores_cobertas)
+mean (df$árvores_descobertas)
+
+#calcular a variância utilizando a função "var".
+  
+var(df$árvores_cobertas)
+var(df$árvores_descobertas)
+```
+
+**Média árvores cobertas**: 7\
+**Variância árvores cobertas**: 2,5\
+**Média árvores descobertas**: 3\
+**Variância árvores descobertas**: 1
+
+# Capítulo 2
+
+## Análise de dados em Ecologia - pg. 83
+
+O Use os dados coletados de cinco medidas repetidas de girinos da rã-da-floresta expostos a 3.000μS e calcule o desvio padrão da média e o erro padrão da média.
+
+```{r}
+# A função de desvio padrão no R é sd().
+# A função de erro padrão da média é std.error(), e está inclusa no pacote "plotrix", que deve ser chamado antes.
+
+library(plotrix)
+df <- data.frame(salgadona = c(32, 37, 41, 45, 50))
+#Para utilizar a fórmula do desvio padrão, deve-se selecionar a coluna a ser trabalhada dentro do data frame, ou transforma-la algum outro tipo de objeto (como um vetor básico como no exemplo: "df2 <- c(32, 37, 41, 45, 50)".
+sd(df$salgadona)
+
+std.error(df)
+```
+
+## Representação dos dados - pg. 96
+
+Utilizando os dados crie um gráfico que demonstre como a demanda de
+oxigênio muda com a temperatura. Com base neste gráfico, calcule o valor
+de Q10 (*razão entre a taxa de um processo fisiológico em uma
+determinada temperatura e essa mesma taxa a uma temperatura 10°C mais
+fria*) para o salmão entre 5 e 15°C.
+
+```{r}
+df <- data.frame(temp = c(5, 10, 15, 20), demandaO2 = c(2, 2.7, 4, 5.6))
+#Plotando o gráfico
+library(ggplot2)
+ggplot(df, aes(temp, demandaO2)) +
+  geom_line()
+#Definindo uma função para calcular Q10
+Q10 <- function(x) {
+  #Puxando (por méio dos operadores "[]"de índice) o valor da demanda de oxigênio com base no valor da tempertura.
+  df$demandaO2[df$temp == x + 10]/df$demandaO2[df$temp == (x)]
+}
+Q10(5)
+```
+# Capítulo 3 
+
+## Representação dos dados - pg. 129
+
+
+Com a utilização dos dados a seguir, plote a relação entre o comprimento e a área de superfície e a relação entre o comprimento e o volume. Com base nesses dois gráficos, observe como os aumentos no comprimento corporal afetam o volume muito mais rapidamente do que a área de superfície.
+
+```{r}
+df <- data.frame(Comprimento = c(10, 20, 30, 40, 50), Área = c(100, 400, 900, 1600, 2500), Volume = c(1000, 8000, 27000, 64000, 125000))
+library(ggplot2)
+#Gráfico 1: Comprimento x Área
+ggplot(df, aes(Comprimento, Área)) +
+  geom_point()
+#Gráfico 2: Comprimento x Volume
+ggplot(df, aes(Comprimento, Volume)) +
+  geom_point()
+```
+
+
+# Capítulo 4
+
+## Análise de dados em Ecologia - pg. 154
+
+```{r}
+df <- data.frame(número_de_predadores = c(0, 1, 2, 3, 4), nível_de_atividade = c(40, 20, 10, 5, 3))
+# chamar a o pacote "ggplot2" e utilizar as funções "ggplot2" e "geom_point".
+library(ggplot2)
+ggplot(df, aes(número_de_predadores, nível_de_atividade)) +
+   geom_point()
+```
+
+A relação entre o número de predadores em um laguinho e o nível de
+atividade da rã-arborícola-cinza é: **uma correlação negativa
+curvilínea**.
+
+## Questões de Revisão - Representação dos dados - pg. 163
+
+A relação entre o tempo e o número médio de minhocas coletadas pelos
+tordos conseguem manter em seus bicos demonstram uma correlação positiva
+curvilínea.
+
+```{r}
+df2 <- data.frame(Tempo = c(0, 1, 2, 3, 4, 5, 6, 7, 8), Núm._médio_minhocas = c(0, 1, 2, 2.8, 3.4, 3.7, 3.9, 4, 4))
+ggplot(df, aes(número_de_predadores, nível_de_atividade)) +
+   geom_point()
+```
+
+# Capítulo 5
+
+## Análise de dados em ecologia - pg. 172
+
+Na relação entre a latitude e a temperatura, descrita por Y = mX + b,
+onde: Y = variável dependente, temperatura (°C); X = variável
+independete, latitude (°N); m = inclinação da reta; b = intercepto de Y
+da reta no ponto onde X = 0
+
+```{r}
+# definindo y como uma função de x (valor default = 0):
+y <- function(x = 0) {
+# definindo o valores das constantes:
+m <- -1.2
+b <- 43
+# agora definindo o cálculo da função:
+(m * x) + b
+}
+# Agora, utilizando a função "y()" (concatenando os tres resultados para virem em uma mesma linha):
+c(y(10),y(20),y(30))
+```
+
+Utilizando tal equação, a temperatura média nas latitudes de 10, 20 e
+30° são:\
+**Para x = 10°, Y = 31°C**\
+**Para x = 20°, Y = 19°C**\
+**Para x = 30°, Y = 7°C**
+
+
+### Representação dos dados| Precipitação na Cidade do México, Quito e La Paz
+
+
+Como observamos neste capítulo, as cidades ao redor do mundo com frequência diferem em seu padrão de precipitação mensal. Com a utilização dos dados fornecidos na tabela, crie um grá뉖co de barras para cada uma das três cidades
+(a) Com base nestes gráficos, quantos picos de precipitação cada cidade recebe? 
+(b) Com base nas suas localizações geográ뉖cas, por que a quantidade de picos de precipitação nestas cidades é diferente?
+
+```{r}
+# Criando dataset
+
+df <- data.frame(mês = c("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"), cidade_do_mexico = c(10.2, 10.2, 12.7, 27.9, 58.4, 157.5, 182.9, 172.7, 144.8, 61, 5.1, 0.8), quito = c(114.3, 129.5, 152.4, 175.3, 124.5 , 48.3, 20.3, 25.4, 78.7, 127, 109.2, 104.1), la_paz = c(129.5, 104.1, 71.1, 35.6, 12.7, 5.1, 6.7, 15.2, 30.5, 40.6, 50.8, 94))
+
+# Transformando o data.frame pra funcionarusando a função pivot longer, do pacto tidyr
+library(tidyr)
+df2 <- pivot_longer( #Pivot longer faz o trem ficar mais longo (alto), retransformando o data frame para que as cidades deixem de ser colunas e estejam incluindas como uma observação categórica.
+  df, cols = -mês, #corrigir os nomes das colunas restantes, o "-" exclui a coluna mês de ficar longer, fazendo com que ela não se repita.
+names_to = "cidades" , values_to = "precipitação"
+  )
+
+# Garantindo que os meses apareceção na ordem certa:
+
+df2$mês <- factor(df2$mês, levels = c("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"))
+
+# Criango o gráfico
+ggplot(df2, aes(x = mês, y = precipitação, fill = cidades)) +
+         geom_col(position = "dodge") # Barras lado ao lado
+```
+
+## Capítulo 6
+
+### Análise de dados em ecologia
+
+Em relação ao conjunto de dados a seguir, determine a média, a mediana e a moda.
+```{r}
+dados <- c(12, 13, 15, 18, 17, 19, 18, 17, 12, 14, 10, 17, 19, 16, 17)
+# Função de média
+mean(dados)
+# Função de mediana
+median(dados)
+# Função de média, retirada do stackoverflow
+mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+mode(dados)
+```
+
+### Representação dos dados | Criação de um diagrama climático
+
+
+Cientistas coletaram dados climáticos de locais em todo o mundo. Com a utilização dos dados da temperatura e precipitação mensal para Miami, Flórida (fornecidos na tabela), crie um diagrama climático. Lembre-se de fazer com que cada aumento de 10°C na temperatura corresponda a um aumento de 20 mm na precipitação.
+
+```{r}
+# Criando o data frame
+df <- data.frame(mês = c("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"), temp = c(2, 5, 9, 15, 18, 23, 28, 25, 21, 15, 8, 3), precipitação = c(45, 50, 104, 100, 120, 110, 88, 100, 140, 98, 100, 65))
+        
+# Fazendo o mês ficar na ordem de mês
+
+df$mês <- factor(df$mês, levels = c("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"))
+
+# Criando o gráfico        
+
+ggplot(df, aes(mês, temp, group = 1)) + 
+  geom_bar(aes(y = precipitação/2), stat = "identity") + 
+  geom_line(colour = "red") + 
+  scale_y_continuous(
+    "temperature, C", 
+    sec.axis = sec_axis(~ . * 2, name = "precipitation, mm")) +
+  theme_bw()
+```
+
+
+# Capítulo 7
+
+## Análise de dados em ecologia
+
+A **força de seleção (S)** é a diferença entre a média da distribuição fenotípica antes e depois da seleção, medida em unidades de desvios padrões.
+
+**Herdabilidade (h²)** é a proporção da variação total do fenótipo causada pelos genes.
+
+Dados os seguintes valores de força de seleção e herdabilidade para a massa dos tomates, calcule a resposta esperada para a seleção em unidades de desvios padrões e gramas:
+
+```{r}
+# Fazendo o data frame:
+df <- data.frame(força_de_seleção = c(0.5, 1, 1.5, 2, 2, 2, 2), herdabilidade = c(0.7, 0.7, 0.7, 0.9, 0.6, 0.3, 0))
+
+# Criando a função segundo a fórmula do livro: 
+# R = S x h²
+
+resp_sel <- function(S, h) {
+  y = S*h
+cat( # concatena e printa
+  "Valores em desvio padrão:", y, "Valores em grama (g):", y*10, 
+  sep="\n" # adiciona uma quebra de linha, pode ser usado dentro das aspas, comono exemplo de análise de dados no capítulo 9.
+  )
+}
+
+# Utilizando a função
+resp_sel(df$força_de_seleção, df$herdabilidade)
+```
+
+Nesse caso, está ocorrendo uma seleção direcional, aumentando o tamanho dos tomates.
+
+## Representação dos dados | Seleção natural nos bicos dos tentilhões
+
+A tabela a seguir lista as distribuições das frequências dos tamanhos dos bicos dos tentilhões, tanto antes quanto depois da seleção. Utilizando um gráfico de barras,
+plote as relações entre tamanho do bico e sua frequência; então, determine quanto o tamanho médio do bico mudou devido à seleção e decida qual tipo de seleção
+ocorreu. 
+
+```{r}
+# Criando o data frame
+df <- data.frame(
+  tamanho_do_bico = c(10, 10.2, 10.4, 10.6, 10.8, 11, 11.2, 11.4, 11.6, 11.8, 12, 12.2, 12.4, 12.6, 12.8, 13, 13.2, 13.4, 13.6, 13.8),
+  frequência_antes = c(0, 0, 0.02, 0.04, 0.08, 0.16, 0.2, 0.2, 0.16, 0.08, 0.04, 0.02, 0, 0, 0, 0, 0, 0, 0, 0),
+  frequência_após = c(0, 0, 0, 0, 0, 0, 0, 0, 0.02, 0.04, 0.08, 0.16, 0.2, 0.2, 0.16, 0.08, 0.04, 0.02, 0, 0 ))
+  
+# Criando os gráficos
+antes <- ggplot( # Associando o gráfico a um objeto para utilizar no próximo passo
+  df, aes(tamanho_do_bico, frequência_antes)) +
+geom_col(position = "dodge") +
+  theme_bw()
+depois <- ggplot( # O mesmo acima
+  df, aes(tamanho_do_bico, frequência_após)) +
+geom_col(position = "dodge") +
+  theme_bw()
+
+# Usando o pacote GridExtra para plotar um do lado do outro
+require(gridExtra)
+grid.arrange(antes, depois, ncol=2)
+
+```
+
+
+# Capítulo 8
+## Análise de dados em ecologia | Coeficientes de determinação
+
+```{r}
+## Criando o data.frame
+df <- data.frame(
+  massa = c(1,1,3,3,5,5),
+  pop_a = c(21,19,13,11,5,3),
+  pop_b = c(22,18,14,10,6,2),
+  pop_c = c(24,16,16,8,7,1)
+  )
+
+# Criando a função
+r2 <- function(pop) {
+fi <- c(20,20,12,12,4,4)
+total_sqr_sum <- sum((pop - mean(pop))^2)
+soma_sqr_err <- sum((pop - fi)^2)
+1 - (soma_sqr_err/total_sqr_sum)
+}
+
+# Calculando r2 para as populações
+# População A
+r2(df$pop_a)
+# População B
+r2(df$pop_b)
+# População C
+r2(df$pop_c)
+
+```
+ 
+O conjunto A é o que melhor se adequa à reta de regressão.
+
+## Representação dos dados | Número versus massa dos filhotes de lagartos
+df
+NÚMERO DE FILHOTES
+ MASSA DOS FILHOTES (g)
+
+```{r}
+df <- data.frame(
+ massa_prole = c(242, 238, 230, 223, 207, 200, 189, 180, 173, 157, 150, 142, 138, 130),
+num_prole = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
+)
+ggplot(df, aes(y = massa_prole, x = num_prole)) +
+  geom_point()
+```
+
+Os lagartos que produzem um grande número de ovos o fazem através da produção de ovos menores.
+
+
+# Capítulo 9
+## Análise de dados em ecologia | Seleção dependente da frequência
+
+Usando as mesmas condições anteriores, calcule o número de cópias de genes por macho e por fêmea sob os dois cenários a seguir:
+1. Quatro machos e cinco fêmeas.
+2. Seis machos e cinco fêmeas.
+
+
+```{r}
+#Fórmula
+
+aptidão <- function(F,M) {
+  prole <- F*2 
+  aptidão_f <- prole/F
+  aptidão_m <- prole/M
+  cat("aptidão média da fêmea:" , aptidão_f, "\naptidão média do macho:", aptidão_m)
+}
+
+# Resultados
+aptidão(5,4)
+aptidão(5,6)
+
+```
+
+Dados os quatro cenários que exploramos, qual razão sexual será favorecida pela seleção natural a longo prazo?
+
+A seleção dependente da frequência favorece o fenótipo mais raro em uma população, então eventualmente ele se tornará o mais comum. A longo prazo, a tendência é se tornar uma razão sexual igual.
+
+## Representação de dados | Seleção dependente da frequência
+
+Na maioria dos organismos com sexos separados, a proporção de machos e fêmeas muda com o tempo. Usando um gráfico linear, plote a proporção de zebras machos e fêmeas em uma população ao longo de 10 anos.
+Com base nesses dados, o que acontece sempre que um dos sexos se torna raro ou comum?
+
+
+```{r}
+# Criando o data frame
+df <- data.frame(
+  anos = seq(1, 10),
+  machos = c(45, 48, 52, 55, 53, 47, 44, 49, 55, 45),
+  fêmeas = c(55, 52, 48, 45, 47, 53, 56, 51, 45, 55)
+)
+# Usando o pivot_longer para colocar a variável (macho ou fêmea) em uma única coluna
+df <- pivot_longer(
+  data = df,
+  cols = c(machos,fêmeas), # define as colunas a serem transformadas
+  names_to = "sexo", # define o nome da nova coluna a ser criada 
+  values_to = "proporção" # define o nome da coluna de valores
+            )
+
+# Criando o gráfico
+ggplot(df, aes(anos, proporção, color = sexo)) +
+geom_line() +
+theme_minimal()
+```
+
+Quando um dos sexos se torna o mais comum, o outro se torna o mais favorecido, que então, se torna o mais comum. Ao longo prazo, a tendência é que a razão sexual se iguale. Isso ocorre devido a seleção dependente da frequência.
+
+# Capítulo 10
+## Análise de dados em ecologia | Calculando a aptidão incusiva
+Use a tabela a seguir para calcular a alteração na aptidão inclusiva se os ajudantes primários apenas aumentassem a aptidão de seus pais para 1,0, em vez de 1,8. Nesse cenário, qual estratégia de ajuda seria mais favorecida pela seleção natural?
+
+```{r}
+AptInd <- 1*0.32
+AptDir <- 2.5*0.5*0.32
+AptInc <- AptInd + AptDir
+print(AptInc)
+```
+
+A aptidão inclusiva nesse caso, cai para 0,72, o que faz com que a estratégia de ajudante secundário (0,84), seja a mais favorecida pela seleção natural, neste caso.
+
+
+## Representação dos dados | Como a vida em grupo afeta o risco de predação
+
+Usando os dados da tabela e seu conhecimento sobre cálculo de desvios padrões amostrais do Capítulo 2, calcule as médias e os desvios padrões para o número de aproximações de um predador por minuto em função de tamanhos diferentes de cardumes. Em seguida, plote as médias e os desvios padrões da amostra usando um gráfico linear.
+Com base nesses dados, o que você pode concluir sobre o efeito do tamanho do cardume na probabilidade de predação por espécies maiores?
+
+```{r}
+# Criando data frame e as médias de cada um
+df <- data.frame(
+  T3 = c(0.9, 0.8, 0.7, 1.1, 1),
+  T5 = c(0.7, 0.8, 0.9, 0.6, 1),
+  T10 = c(0.4, 0.5, 0.6, 0.8, 0.7),
+  T15 = c(0.4, 0.5, 0.3, 0.2, 0.6),
+  T20 = c(0.1, 0.1, 0.2, 0.3, 0.3)
+)
+
+# Gerando a média e os desvios padrões
+médias <- colMeans(df) # Faz a média de todas as colunas no data.frame
+desvios <- sapply(df, sd) # Faz o desvio padrão de todas as colunas
+
+# Vou ter que usar o pivot longer, colocar todos os valores juntos e criar uma coluna que indique o tamanho do cardume
+df2 <-
+pivot_longer(
+  data = df,
+  cols = c(T3,T5,T10,T15,T20),
+  names_to = "tamanho_do_cardume",
+  values_to = "número_de_abordagens"
+)
+
+# Removendo o T e deixando só o número
+df2$tamanho_do_cardume <- gsub('T','',df2$tamanho_do_cardume) # A função gsub troca as strings
+
+# Criando um fator pra deixar o tamanho do cardume na ordem certa
+df2$tamanho_do_cardume <- factor(df2$tamanho_do_cardume, levels = c(3, 5, 10, 15, 20))
+
+# Gerando o gráfico
+ggplot(df2, aes(x = tamanho_do_cardume, y = número_de_abordagens)) +
+geom_boxplot() +
+  scale_y_continuous(breaks = seq(0,1,by=0.2)) +
+  theme_bw()
+```
+
+Quanto maior o tamanho do cardume, menor o número de abordagens por predadores.
+
+
+# Capítulo 11
+## Análise de dados em ecologia | Levantamentos de marcação e captura
+Utilizando a fórmula ```N = M × C ÷ R```, onde:
+- N = População inteira;
+- M = Indivíduos marcados primeira coleta;
+- C = Total de indivíduos capturados na segunda coleta;
+- R = Indivíduos recapturados na segunda coleta;
+```{r}
+M <- 20
+C <- 48
+R <- 24
+N <- (M*C)/R
+```
+
+N = 40.
+
+Para se calcular a densidade dos lagostins, divide-se o n° de indivíduos por unidade de área. Então
+```{r}
+densidade <- 40/300 
+```
+
+Densidade: 0,13 lagostim/m²
+
+## Representação dos dados | Distribuição livre ideal
+
+Com a utilização dos dados em relação aos habitats de alta e baixa qualidade, crie um gráfico que represente como o benefício per capita é alterado em função do número de indivíduos na mancha.
+
+```{r}
+# Criando o data frame
+df <- data.frame(
+  número_de_indivíduos = seq(1,10),
+  ben_alta_qualidade = c(10, 7.9, 6.5, 5.4, 4.5, 3.9, 3.4, 3, 2.7, 2.4),
+  ben_baixa_qualidade = c(5, 4.3, 3.7, 3.2, 2.9, 2.6, 2.4, 2.2, 2, 1.9)
+)
+
+# Usando o pivot_longer para os valores ficarem na mesma coluna
+df2 <-
+pivot_longer(
+  data = df,
+  cols = c(ben_alta_qualidade, ben_baixa_qualidade),
+  names_to = "Mancha",
+  values_to = "Benefício per capita"
+)
+
+# Gerando o gráfico
+ggplot(df2, aes(y = `Benefício per capita`, x = número_de_indivíduos, color = Mancha)) +
+  geom_line() +
+  scale_x_continuous(breaks = seq(0,10,by=1)) + # Fazendo a escala ser contínua, com quebras de 0 até 10, em intervalos de 1. 
+  theme_bw()
+```
+
+Com base nesses dados, quantos indivíduos devem se dirigir para a área de alta qualidade antes que um indivíduo se volte para a área de baixa qualidade? Se houvesse 12 indivíduos, e eles seguissem uma distribuição livre ideal, aproximadamente quantos se encontrariam em cada habitat?
+
+Aproximadademente 4,5 indivíduos devem estar presentes na mancha de alta qualidade, para que 1 indivíduo migre para a de baixa qualidade. Ou seja, após quatro indivíduos, o quinto já deve se dirigir a mancha de baixa qualidade. Com 12 indivíduos, 8 estariam na mancha de melhor qualidade , e 4 na de pior qualidade para seguir uma livre distribuição ideal.
+
+
+# Capítulo 12
+## Análise de dados em ecologia | Cálculo dos valoresda tábua de vida
+
+A seguir, está a tabela da sobrevivência e da fecundidade específicas da idade de uma população de esquilo-cinzentos (*Sciurus carolinensis*) na Carolina do Norte.
+Com a utilização dos dados da tabela, calcule a sobrevivência (lx), a taxa reprodutiva líquida (R0), o tempo de geração (T) e a taxa de aumento intrínseco (l)
+
+```{r}
+# Criando o data frame
+df <- data.frame(
+  "Classe etária (x)" = seq(0,7),
+  "Número de indivíduos (Nx)" = c(530, 134, 56, 39, 23, 12, 5, 2), 
+  "Sobrevivência total (lx)" = c(1, 0.253, 0.116, 0.089, 0.058, 0.039, 0.025, 0.022),
+  "Taxa de fecundidade (bx)" = c(0.05, 1.28, 2.28, 2.28, 2.28, 2.28, 2.28, 2.28) 
+  )
+
+# Cálculos
+## Taxa de reprodução líquida
+Rzero <- sum(df$Sobrevivência.total..lx.*df$Taxa.de.fecundidade..bx.)
+
+## Tempo de geração
+TmpGer <-sum(df$Classe.etária..x.*df$Sobrevivência.total..lx.*df$Taxa.de.fecundidade..bx.)/sum(df$Sobrevivência.total..lx.*df$Taxa.de.fecundidade..bx.)
+
+## Taxa de aumento intrínseco
+TaxaAumento <- Rzero^(1/TmpGer)
+
+## Printando
+cat("Taxa de reprodução líquida:" , Rzero, "\nTempo de geração:", TmpGer, "\nTaxa de aumento intrínseco:", TaxaAumento)
+```
+
+## Representação dos dados | Curvas de sobrevivência total
+
+Para os dados de sobrevivência total a seguir, represente graficamente as respectivas curvas com a 
+utilização de escala logarítmica no eixo y.
+
+```{r}
+# Criando o data frame
+df <- data.frame(
+  mês = c(1, 5, 7, 8, 10, 12, 13),
+  Diamorpha = c(1, 0.81, 0.09, 0.03, 0.02, 0.01, 0),
+  Minuartia = c(1, 0.37, 0.05, 0.02, 0.01, 0.01, 0)
+)
+# Usando o pivot longer para deixar as observações em uma coluna só
+df2 <- 
+  pivot_longer(
+  data = df,
+  cols = c(Diamorpha, Minuartia),
+  names_to = "Planta",
+  values_to = "lx"
+)
+
+# Criando o gráfico
+ggplot(df2, aes(x = mês, y = lx, color = Planta)) +
+  geom_line() + 
+  scale_y_log10() +
+  labs(title = "Curvas de sobrevivência total",
+       color = "Plantas"
+       )
+```
+
+# Capítulo 13
+## Análise de dados em ecologia | Dependência tardia da flexibilidade em flixweed
+A flixweed (*Descurainia sophia*) é uma erva nativa da Europa, mas que foi introduzida na América do Norte. Os pesquisadores que estudaram essa erva observaram que o número de plantas por m2 de solo flutua de modo cíclico ao longo do tempo. A população cresce de acordo com um modelo de dependência tardia da densidade, em que K = 100, r = 1,1 e τ =  1.
+
+Com a utilização dos dados fornecidos, calcule os tamanhos populacionais da planta a partir do ano 5 até o ano 15. Com base no produto de rτ, qual tipo de comportamento oscilante você espera observar nessa população mesmo antes de fazer os cálculos? Plote os resultados para confirmar a sua previsão.
+
+```{r}
+crescimento <- function(N1, N2, r, K, tempo) {
+  # Vetor para armazenar os valores de Nt
+  Nt <- numeric(tempo)
+  Nt[1] <- N1  # Valor inicial N1
+  Nt[2] <- N2  # Valor inicial N2
+  
+  for (t in 3:tempo) { 
+    # O loop for é utilizador para realizar uma tarefa repetitiva em um intervalo especificado. No caso da função fornecida, o for é utilizado para calcular os valores de Nt de t=3 até tmax, aplicando a fórmula em cada iteração.
+    alteracao_esperada <- r * Nt[t-1] * (1 - Nt[t-2] / K)
+    Nt[t] <- Nt[t-1] + alteracao_esperada
+  }
+  
+  return(Nt)
+}
+
+# Nesse caso, os parâmetros iniciais são:
+K <- 100  # Capacidade de suporte
+r <- 1.1  # Taxa de crescimento
+N1 <- 10  # População inicial N1
+N2 <- 20  # População inicial N2
+tempo <- 20 # Até N15
+
+populacao <- crescimento(N1, N2, r, K, tempo)
+print(populacao)
+
+## Criando o data frame 
+df <- data.frame(
+  tempo = 1:tempo,
+  população = round(populacao,1)
+)
+
+## Criando o gráfico
+ggplot(df, aes(y = população, x = tempo)) +
+  geom_line() +
+  geom_point()
+
+
+```
+
+
+## Representação dos dados | Exploração do equilíbrio do modelo básico de metapopulação
+
+Observamos que o modelo básico de metapopulação nos possibilita calcular a proporção de manchas ocupadas com base nas probabilidades de extinção (e) e de colonização (c).
+1. Com base nas probabilidades de extinção e colonização fornecidas na tabela à direita, complete a tabela.
+2. Use um gráfico linear para plotar a relação entre a proporção de manchas ocupadas e a taxa de extinção.
+3. No mesmo gráfico, plote a relação entre a proporção de manchas ocupadas e a taxa de colonização.
+4. Com base nos dois gráfiߴcos lineares, em que momento as taxas de extinção e as taxas de colonização entram em equilíbrio?
+
+
+```{r}
+# Criando as colunas iniciais da tabela
+
+df <- data.frame(
+  p_manchas_ocupadas_p = c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1),
+  prob_extinção_e = rep(0.25, 10),
+  prob_colonização_c = rep(0.5, 10)
+  )
+  
+# Completando a tabela
+
+  df$taxa_extinção <- (df$p_manchas_ocupadas_p*df$prob_extinção_e)
+  df$taxa_colonização <- (df$prob_colonização_c*df$p_manchas_ocupadas_p)*(1 - df$p_manchas_ocupadas_p)
+
+# Transformando em long para poder plotar
+df2 <-  
+pivot_longer(
+  data = df,
+  cols = c(taxa_extinção,taxa_colonização),
+  names_to = "Tipo_de_taxa",
+  values_to = "Valor"
+)
+  
+# Criando o gráfico
+ggplot(df2, aes(x= p_manchas_ocupadas_p, y = Valor, color = Tipo_de_taxa)) +
+  geom_line() +
+  scale_y_continuous(limits = c(0,0.3)) +
+  geom_point()
+```
+
+As taxas de colonização e extinção entram em equilíbrio com 50% das manchas ocupadas. 
