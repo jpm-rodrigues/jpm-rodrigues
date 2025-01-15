@@ -1,4 +1,7 @@
-## Hi there 👋
+## PT
+Graduado em Ciências Biológicas pela UFMG. Experiência na elaboração e campanhas de amostragem em campo de relatórios socioambientais. Experiência em técnicas laboratoriais, normas de segurança, métodos de rotina e amostragem com interpretação dos resultados. Experiência com georreferenciamento (QGIS) e linguagens de programação (R, Python). Pacote office e inglês avançado.
+
+Compartilho aqui alguns arquivos em RScript e Excel que compoem estudos e ou projetos pessoais nas quais utilizei tais ferramentas.
 
 <!--
 **jpm-rodrigues/jpm-rodrigues** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
