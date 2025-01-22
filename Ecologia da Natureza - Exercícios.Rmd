@@ -64,7 +64,15 @@ df <- data.frame(temp = c(5, 10, 15, 20), demandaO2 = c(2, 2.7, 4, 5.6))
 #Plotando o gráfico
 library(ggplot2)
 ggplot(df, aes(temp, demandaO2)) +
-  geom_line()
+  geom_line(color = "blue") +
+  geom_point(color = "blue") +
+  xlab("Temperatura °C") +
+  ylab("Oxigênio consumido (mg02/min/kg") +
+  scale_x_continuous(limits = c(5,20)) +
+  scale_y_continuous(limits = c(0,6)) +
+  theme_bw() +
+  theme(aspect.ratio = 1:1)
+  
 #Definindo uma função para calcular Q10
 Q10 <- function(x) {
   #Puxando (por méio dos operadores "[]"de índice) o valor da demanda de oxigênio com base no valor da tempertura.
@@ -82,12 +90,35 @@ Com a utilização dos dados a seguir, plote a relação entre o comprimento e a
 ```{r}
 df <- data.frame(Comprimento = c(10, 20, 30, 40, 50), Área = c(100, 400, 900, 1600, 2500), Volume = c(1000, 8000, 27000, 64000, 125000))
 library(ggplot2)
+
 #Gráfico 1: Comprimento x Área
+Comprimento_x_Área <-
 ggplot(df, aes(Comprimento, Área)) +
-  geom_point()
+  geom_point(colour = "red") +
+  geom_line(color = "red") + 
+scale_y_continuous(labels=function(x) format(x, big.mark = ".", scientific = FALSE)) +
+ylab("Área da superfície(cm²)") + 
+  theme_bw()
+
 #Gráfico 2: Comprimento x Volume
+Comprimento_x_Volume <- 
 ggplot(df, aes(Comprimento, Volume)) +
-  geom_point()
+  geom_point(colour = "red") +
+  geom_line(color = "red") +
+xlab("Comprimento(cm)") +
+scale_y_continuous(
+  labels=function(x) 
+    format(x, big.mark = ".", scientific = FALSE)
+  ) + 
+ylab("Volume(cm³)") + 
+  theme_bw()
+
+
+
+# Usando o pacote gridExtra para plotar um do lado do outro
+require(gridExtra)
+grid.arrange(Comprimento_x_Volume, Comprimento_x_Área, ncol=2)
+
 ```
 
 
@@ -100,7 +131,12 @@ df <- data.frame(número_de_predadores = c(0, 1, 2, 3, 4), nível_de_atividade =
 # chamar a o pacote "ggplot2" e utilizar as funções "ggplot2" e "geom_point".
 library(ggplot2)
 ggplot(df, aes(número_de_predadores, nível_de_atividade)) +
-   geom_point()
+  geom_point(colour = "blue") +
+  geom_line(colour = "blue") +
+  xlab("Número de predadores") +
+  ylab("Nível de atividade (percentual") +
+  theme_bw() +
+  theme(aspect.ratio = 1:1)
 ```
 
 A relação entre o número de predadores em um laguinho e o nível de
@@ -115,8 +151,13 @@ curvilínea.
 
 ```{r}
 df2 <- data.frame(Tempo = c(0, 1, 2, 3, 4, 5, 6, 7, 8), Núm._médio_minhocas = c(0, 1, 2, 2.8, 3.4, 3.7, 3.9, 4, 4))
-ggplot(df, aes(número_de_predadores, nível_de_atividade)) +
-   geom_point()
+ggplot(df2, aes(Tempo, Núm._médio_minhocas)) +
+  geom_line(colour = "#669900") +
+  geom_point(color = "#669900") +
+  xlab("Tempo") +
+  ylab("Número de minhocas coletadas") +
+  theme_bw() +
+  theme(aspect.ratio = 1:1)
 ```
 
 # Capítulo 5
@@ -158,7 +199,11 @@ Como observamos neste capítulo, as cidades ao redor do mundo com frequência di
 ```{r}
 # Criando dataset
 
-df <- data.frame(mês = c("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"), cidade_do_mexico = c(10.2, 10.2, 12.7, 27.9, 58.4, 157.5, 182.9, 172.7, 144.8, 61, 5.1, 0.8), quito = c(114.3, 129.5, 152.4, 175.3, 124.5 , 48.3, 20.3, 25.4, 78.7, 127, 109.2, 104.1), la_paz = c(129.5, 104.1, 71.1, 35.6, 12.7, 5.1, 6.7, 15.2, 30.5, 40.6, 50.8, 94))
+df <- data.frame(mês = c("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"), cidade_do_méxico = c(10.2, 10.2, 12.7, 27.9, 58.4, 157.5, 182.9, 172.7, 144.8, 61, 5.1, 0.8), quito = c(114.3, 129.5, 152.4, 175.3, 124.5 , 48.3, 20.3, 25.4, 78.7, 127, 109.2, 104.1), la_paz = c(129.5, 104.1, 71.1, 35.6, 12.7, 5.1, 6.7, 15.2, 30.5, 40.6, 50.8, 94))
+
+# Garantindo que os meses apareceção na ordem certa:
+
+df$mês <- factor(df$mês, levels = c("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez")) 
 
 # Transformando o data.frame pra funcionarusando a função pivot longer, do pacto tidyr
 library(tidyr)
@@ -167,13 +212,47 @@ df2 <- pivot_longer( #Pivot longer faz o trem ficar mais longo (alto), retransfo
 names_to = "cidades" , values_to = "precipitação"
   )
 
-# Garantindo que os meses apareceção na ordem certa:
 
-df2$mês <- factor(df2$mês, levels = c("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"))
-
-# Criango o gráfico
+# Criango o gráfico (Barras lado a lado)
 ggplot(df2, aes(x = mês, y = precipitação, fill = cidades)) +
-         geom_col(position = "dodge") # Barras lado ao lado
+  geom_col(position = "dodge") + # Barras lado ao y
+  xlab("Mês") +
+  ylab("Precipitação mensal (mm)") +
+  scale_fill_manual( # Corrigindo a legenda das cidades e definindo cores (fill)
+    values = c(cidade_do_méxico = "blue", la_paz = "red", quito = "green"),
+    labels = c("Cidade do México", "La paz", "Quito")) +
+  theme_bw()
+  
+
+# Criango o gráfico (Três gráficos juntos, lado a lado) (gridExtra)
+
+gCidade_do_méxico <- ggplot(df, aes(mês, cidade_do_méxico)) +
+  geom_col(fill = "orange") + 
+theme_bw() +
+theme(
+  axis.title.x = element_blank() # Remover título do eixo X
+)+
+ylab("Cidade do México")
+
+gQuito <- ggplot(df, aes(x= mês, quito)) +
+geom_col(fill = "orange") + 
+theme_bw() +
+theme(
+  axis.title.x = element_blank(), # Remover título do eixo X
+) +
+  ylab("Quito")
+
+gLa_paz <- ggplot(df, aes(mês, la_paz)) + 
+  geom_col(fill = "orange") + 
+theme_bw() + 
+xlab("Mês") +
+  ylab("La Paz")
+
+
+require(gridExtra)
+grid.arrange(gCidade_do_méxico, gQuito, gLa_paz, nrow=3)
+
+#### Depois preciso descobrir um jeito de colocar uma legenda no eixo Y para todos, e separar igual exemplo do livro
 ```
 
 ## Capítulo 6
@@ -211,12 +290,17 @@ df$mês <- factor(df$mês, levels = c("Jan", "Fev", "Mar", "Abr", "Mai", "Jun", 
 # Criando o gráfico        
 
 ggplot(df, aes(mês, temp, group = 1)) + 
-  geom_bar(aes(y = precipitação/2), stat = "identity") + 
-  geom_line(colour = "red") + 
+  geom_bar(fill = "blue", aes(y = precipitação/2), stat = "identity") + 
+  geom_line(colour = "red", size = 1) + 
   scale_y_continuous(
-    "temperature, C", 
-    sec.axis = sec_axis(~ . * 2, name = "precipitation, mm")) +
-  theme_bw()
+    "Temperatura (°C)", 
+    sec.axis = sec_axis(~ . * 2, name = "Precipitação (mm)")) +
+  theme_bw() +
+  xlab("Mês") +
+  theme( 
+    axis.title.y = element_text(color = "red"),  # Alterando a cor do título do eixo Y
+    axis.title.y.right = element_text(color = "blue")  # Alterando a cor do título do eixo Y direito
+  )
 ```
 
 
@@ -253,9 +337,7 @@ Nesse caso, está ocorrendo uma seleção direcional, aumentando o tamanho dos t
 
 ## Representação dos dados | Seleção natural nos bicos dos tentilhões
 
-A tabela a seguir lista as distribuições das frequências dos tamanhos dos bicos dos tentilhões, tanto antes quanto depois da seleção. Utilizando um gráfico de barras,
-plote as relações entre tamanho do bico e sua frequência; então, determine quanto o tamanho médio do bico mudou devido à seleção e decida qual tipo de seleção
-ocorreu. 
+A tabela a seguir lista as distribuições das frequências dos tamanhos dos bicos dos tentilhões, tanto antes quanto depois da seleção. Utilizando um gráfico de barras, plote as relações entre tamanho do bico e sua frequência; então, determine quanto o tamanho médio do bico mudou devido à seleção e decida qual tipo de seleção ocorreu. 
 
 ```{r}
 # Criando o data frame
@@ -264,15 +346,40 @@ df <- data.frame(
   frequência_antes = c(0, 0, 0.02, 0.04, 0.08, 0.16, 0.2, 0.2, 0.16, 0.08, 0.04, 0.02, 0, 0, 0, 0, 0, 0, 0, 0),
   frequência_após = c(0, 0, 0, 0, 0, 0, 0, 0, 0.02, 0.04, 0.08, 0.16, 0.2, 0.2, 0.16, 0.08, 0.04, 0.02, 0, 0 ))
   
+# Pivot_longer
+df2 <-
+  pivot_longer(df, c(frequência_antes, frequência_após),
+               names_to = "frequência",
+               values_to = "valor"
+               )
+
+
+
 # Criando os gráficos
 antes <- ggplot( # Associando o gráfico a um objeto para utilizar no próximo passo
   df, aes(tamanho_do_bico, frequência_antes)) +
 geom_col(position = "dodge") +
-  theme_bw()
+  theme_bw() +
+  xlab("Tamanho do bico")+
+  ylab("Antes")
+
 depois <- ggplot( # O mesmo acima
   df, aes(tamanho_do_bico, frequência_após)) +
 geom_col(position = "dodge") +
-  theme_bw()
+  theme_bw() +
+  xlab("Tamanho do bico")+
+  ylab("Depois")
+
+ggplot(df2, aes(tamanho_do_bico, valor, fill = frequência)) +
+  geom_col(position = "dodge") +
+  theme_bw() +
+  xlab("Tamanho do bico (mm)") +
+  ylab("Frequência") +
+  scale_fill_manual(
+    values = c(frequência_antes = "blue", frequência_após = "orange"),
+               labels = c("Antes","Depois")
+  ) +
+  theme(legend.title = element_blank())
 
 # Usando o pacote GridExtra para plotar um do lado do outro
 require(gridExtra)
@@ -324,7 +431,12 @@ df <- data.frame(
 num_prole = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
 )
 ggplot(df, aes(y = massa_prole, x = num_prole)) +
-  geom_point()
+  geom_point(color = "orange") +
+  xlab("Número de filhotes") +
+  ylab("Massa dos filhotes (g)") +
+  theme_bw() +
+  theme(
+    aspect.ratio = 1:1)
 ```
 
 Os lagartos que produzem um grande número de ovos o fazem através da produção de ovos menores.
@@ -365,6 +477,9 @@ Com base nesses dados, o que acontece sempre que um dos sexos se torna raro ou c
 
 
 ```{r}
+# Chamando o pacote necessário mais abaixo
+library(scales)
+
 # Criando o data frame
 df <- data.frame(
   anos = seq(1, 10),
@@ -380,9 +495,23 @@ df <- pivot_longer(
             )
 
 # Criando o gráfico
-ggplot(df, aes(anos, proporção, color = sexo)) +
+ggplot(df, aes(anos, proporção*0.01, color = sexo)) +
 geom_line() +
-theme_minimal()
+geom_point() +
+xlab("Anos") +
+ylab("Proporção de cada sexo") +
+scale_x_continuous(breaks = c(0,2,4,6,8,10)) +
+scale_y_continuous(
+  limits = 0:1,
+  labels = label_number(0.1) # Diminuindo a casa decimal usando essa função
+          #label_percent() Seria uma outra opção
+  )  +
+scale_color_manual(labels = c("Fêmeas", "Machos"), values = c("red", "blue"))
+  theme_bw() +
+  theme(
+    aspect.ratio = 1:1,
+    legend.title = (element_blank())
+    )
 ```
 
 Quando um dos sexos se torna o mais comum, o outro se torna o mais favorecido, que então, se torna o mais comum. Ao longo prazo, a tendência é que a razão sexual se iguale. Isso ocorre devido a seleção dependente da frequência.
@@ -438,7 +567,12 @@ df2$tamanho_do_cardume <- factor(df2$tamanho_do_cardume, levels = c(3, 5, 10, 15
 # Gerando o gráfico
 ggplot(df2, aes(x = tamanho_do_cardume, y = número_de_abordagens)) +
 geom_boxplot() +
-  scale_y_continuous(breaks = seq(0,1,by=0.2)) +
+xlab("Tamanho do cardume") +
+ylab("Número de abordagens") +
+  scale_y_continuous(
+    breaks = seq(0,1,by=0.2),
+    labels = label_number(accuracy = 0.1)
+    ) +
   theme_bw()
 ```
 
@@ -492,8 +626,13 @@ pivot_longer(
 # Gerando o gráfico
 ggplot(df2, aes(y = `Benefício per capita`, x = número_de_indivíduos, color = Mancha)) +
   geom_line() +
+  xlab("Número de indivíduos") +
   scale_x_continuous(breaks = seq(0,10,by=1)) + # Fazendo a escala ser contínua, com quebras de 0 até 10, em intervalos de 1. 
-  theme_bw()
+  scale_color_manual(labels = c("Mancha de alta qualidade","Mancha de baixa qualidade"), values = c( "red", "blue")) +
+  theme_bw() +
+  theme(
+    legend.title = element_blank()
+  )
 ```
 
 Com base nesses dados, quantos indivíduos devem se dirigir para a área de alta qualidade antes que um indivíduo se volte para a área de baixa qualidade? Se houvesse 12 indivíduos, e eles seguissem uma distribuição livre ideal, aproximadamente quantos se encontrariam em cada habitat?
@@ -556,8 +695,12 @@ ggplot(df2, aes(x = mês, y = lx, color = Planta)) +
   geom_line() + 
   scale_y_log10() +
   labs(title = "Curvas de sobrevivência total",
-       color = "Plantas"
-       )
+       color = "Plantas", 
+       x = "Meses",
+       y = "Proporção de plantas sobreviventes (escala log)"
+       ) +
+  theme_bw()+
+  theme(aspect.ratio = 1, legend.title = element_blank())
 ```
 
 # Capítulo 13
@@ -600,9 +743,12 @@ df <- data.frame(
 
 ## Criando o gráfico
 ggplot(df, aes(y = população, x = tempo)) +
-  geom_line() +
-  geom_point()
-
+  geom_line(color = "669900") +
+  geom_point(color = "669900", size = 2) +
+  xlab("Ano") +
+  ylab("Tamanho da população") +
+  theme_bw() +
+  theme(aspect.ratio = 1:1)
 
 ```
 
@@ -642,8 +788,14 @@ pivot_longer(
 # Criando o gráfico
 ggplot(df2, aes(x= p_manchas_ocupadas_p, y = Valor, color = Tipo_de_taxa)) +
   geom_line() +
+  geom_point() + 
+  scale_x_continuous(labels = label_number(accuracy = 0.1)) +
   scale_y_continuous(limits = c(0,0.3)) +
-  geom_point()
+  scale_color_manual(labels = c("Taxa de colonização", "Taxa de extinção"), values = c("blue", "red")) +
+xlab("Proporção de manchas ocupadas") +
+ylab("Taxa de extinção ou colonização") +
+  theme_bw() +
+  theme(aspect_ratio = 1:1, legend.title = element_blank())
 ```
 
 As taxas de colonização e extinção entram em equilíbrio com 50% das manchas ocupadas. 
